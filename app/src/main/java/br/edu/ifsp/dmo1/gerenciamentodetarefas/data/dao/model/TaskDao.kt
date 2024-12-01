@@ -10,7 +10,12 @@ object TaskDao {
         taskList.add(task)
     }
 
-    fun getAll() = taskList
+    fun getAll(): MutableList<Task> {
+        //O sortBy retorna um Unit e não uma lista nova modificada, já que ele ordena in place
+        taskList.sortBy { it.isCompleted }
+        return taskList
+    }
+
 
     fun get(id: Long): Task? {
         return taskList.stream()
