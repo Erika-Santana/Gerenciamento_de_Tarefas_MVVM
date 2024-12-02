@@ -2,6 +2,11 @@ package br.edu.ifsp.dmo1.gerenciamentodetarefas.ui.main
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.view.View
+import android.view.View.OnClickListener
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemSelectedListener
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
@@ -17,10 +22,11 @@ import br.edu.ifsp.dmo1.gerenciamentodetarefas.databinding.TasklistItemBinding
 import br.edu.ifsp.dmo1.gerenciamentodetarefas.ui.adapter.TaskAdapter
 import br.edu.ifsp.dmo1.gerenciamentodetarefas.ui.listener.TaskClickListener
 
-class MainActivity : AppCompatActivity(), TaskClickListener {
+class MainActivity : AppCompatActivity(), TaskClickListener, OnItemSelectedListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainViewModel
     private lateinit var adapter: TaskAdapter
+    private val valores  = arrayOf("Tarefas concluídas", "Tarefas a concluir", "Mostrar todas as tarefas")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,11 +35,20 @@ class MainActivity : AppCompatActivity(), TaskClickListener {
 
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
+        val adapterSpinner : ArrayAdapter<String> = ArrayAdapter(
+            this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, valores
+        )
+
+        binding.spinnerId.adapter = adapterSpinner
+
+        binding.spinnerId.onItemSelectedListener = this
+
         configListview()
         configOnClickListener()
         configObservers()
 
     }
+
 
    override fun clickDone(position: Int) {
         viewModel.updateTask(position)
@@ -98,5 +113,18 @@ class MainActivity : AppCompatActivity(), TaskClickListener {
 
         val dialog = builder.create()
         dialog.show()
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        when (position) {
+            0 -> viewModel.tarefasConcluidas()
+            1 -> viewModel.tarefasNaoConcluidas()
+            2 -> viewModel.pegaTodasTarefas()
+        }
+
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+        TODO("Not yet implemented")
     }
 }

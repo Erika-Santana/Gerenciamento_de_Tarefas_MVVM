@@ -24,21 +24,33 @@ class MainViewModel : ViewModel() {
 
     init {
         mock()
-        load()
+        load(0)
+    }
+
+    fun pegaTodasTarefas(){
+        load(0)
+    }
+
+    fun tarefasConcluidas(){
+      load(1)
+    }
+
+    fun tarefasNaoConcluidas(){
+        load(2)
     }
 
     fun insertTask(description: String) {
         val task = Task(description, false)
         dao.add(task)
         _insertTask.value = true
-        load()
+        load(0)
     }
 
     fun updateTask(position: Int) {
         val task = dao.getAll()[position]
         task.isCompleted = !task.isCompleted
         _updateTask.value = true
-        load()
+        load(0)
     }
 
     private fun mock() {
@@ -47,9 +59,12 @@ class MainViewModel : ViewModel() {
         dao.add(Task("Fazer trabalho de DMO1", true))
     }
 
-    private fun load() {
-        _tasks.value = dao.getAll()
+    private fun load(valor: Int) {
+        when (valor) {
+            0 -> _tasks.value = dao.getAll()
+            1 -> _tasks.value = dao.getTarefasConcluidas()
+            2 -> _tasks.value = dao.getTarefasNaoConcluidas()
+        }
     }
-
 
 }

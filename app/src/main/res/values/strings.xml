@@ -7,4 +7,5 @@
     <string name="task_inserted_sucess">Tarefa inserida com sucesso.</string>
     <string name="task_inserted_error">Erro ao inserir tarefa.</string>
     <string name="task_update_sucess">Valor inserido com sucesso!</string>
+    <string name="selecionaOpcao">Visualizacao</string>
 </resources>

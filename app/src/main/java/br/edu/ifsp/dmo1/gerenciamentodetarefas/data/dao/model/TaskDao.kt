@@ -24,4 +24,20 @@ object TaskDao {
             .orElse(null)
     }
 
+    fun getTarefasConcluidas() :MutableList<Task>{
+        val concluidas : MutableList<Task>
+
+        concluidas = taskList.filter { it.isCompleted }.toMutableList()
+
+        return concluidas
+    }
+
+    fun getTarefasNaoConcluidas() :MutableList<Task>{
+        val naoConcluidas : MutableList<Task>
+
+        naoConcluidas = taskList.filter { !it.isCompleted }.toMutableList()
+
+        return naoConcluidas
+    }
+
 }
